@@ -10,19 +10,20 @@ find_package(OpenGL REQUIRED)
 
 add_subdirectory(thirdparty/CLI11)
 add_subdirectory(thirdparty/glfw)
-add_subdirectory(thirdparty/imgui)
 
-add_executable(${CPP_PROJECT_NAME} src/main.cpp src/glad.c ${IMGUI_source_files})
+file(GLOB IMGUI_SOURCES thirdparty/imgui thirdparty/imgui/examples *.c *.cpp)
+
+add_executable(${CPP_PROJECT_NAME} src/main.cpp src/glad.c ${IMGUI_SOURCES})
 
 if(MSVC)
     
 else()
-    set( CMAKE_CXX_FLAGS "-Wall -Werror -Wpedantic -Wextra" )
+    set(CMAKE_CXX_FLAGS "-Wall -Werror -Wpedantic -Wextra")
 endif()
 
 target_compile_options(${CPP_PROJECT_NAME} PRIVATE -DUNICODE)
 
-target_include_directories(${CPP_PROJECT_NAME} PUBLIC include)
+target_include_directories(${CPP_PROJECT_NAME} PRIVATE include)
 target_include_directories(${CPP_PROJECT_NAME} PRIVATE ${OPENGL_INCLUDE_DIR})
 
 target_link_libraries(${CPP_PROJECT_NAME} PRIVATE CLI11)
