@@ -12,8 +12,9 @@ add_subdirectory(thirdparty/CLI11)
 add_subdirectory(thirdparty/glfw)
 
 file(GLOB IMGUI_SOURCES thirdparty/imgui thirdparty/imgui/examples *.c *.cpp)
+file(GLOB SOURCES src *.c *.cpp)
 
-add_executable(${CPP_PROJECT_NAME} src/main.cpp src/glad.c ${IMGUI_SOURCES})
+add_executable(${CPP_PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES})
 
 if(MSVC)
     
