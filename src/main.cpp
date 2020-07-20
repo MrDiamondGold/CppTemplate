@@ -1,92 +1,71 @@
 //#include <glad/glad.h>
+//#include <GLFW/glfw3.h>
+
+#include <glad/glad.h>
+
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
-
-#ifdef _WIN32
-#include <ixwebsocket/IXNetSystem.h>
-#endif
-
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl2.h>
-
 #include <CLI/CLI.hpp>
 #include <iostream>
 #include <memory>
 #include <string>
-#include <strstream>
+#include <sstream>
+
+const std::string title = "Template";
+
+GLFWwindow* window;
 
 struct CmdArgs {
     int width, height;
 };
 
-int main(int argc, char** argv) {
-    CLI::App app{"Cpp Template"};
+void init(CmdArgs arguments) {
+    if(!glfwInit()) {
+        throw std::runtime_error("Failed to initialize glfw.");
+    }
 
-    CmdArgs arguments = {1920, 1080};
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    window = glfwCreateWindow(arguments.width, arguments.height, title.c_str(), NULL, NULL);
+    if(window == nullptr) {
+        throw std::runtime_error("Failed to create glfw window.");
+    }
+
+    glfwMakeContextCurrent(window);
+
+    if(!gladLoadGL()) {
+        throw std::runtime_error("Failed to load OpenGL context.");
+    }
+}
+
+int main(int argc, char** argv) {
+    CLI::App app{title.c_str()};
+
+    CmdArgs arguments = {640, 480};
 
     app.add_option("--width", arguments.width, "");
     app.add_option("--height", arguments.height, "");
 
     CLI11_PARSE(app, argc, argv);
 
-    std::string title = "Template";
+    try {
+        init(arguments);
 
-#ifdef _WIN32
-    ix::initNetSystem();
-#endif
+        while(!glfwWindowShouldClose(window))
+        {
+            glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
 
-    if (!glfwInit()) {
-        // ERROR
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+        }
+    }
+    catch(const std::exception& e) {
+        std::cerr << e.what() << "\n";
     }
 
-    GLFWwindow *window = glfwCreateWindow(arguments.width, arguments.height, title.c_str(), nullptr, nullptr);
-    if (window == nullptr) {
-        // ERROR
-    }
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);
-
-    ImGui::CreateContext();
-    ImGuiIO &io = ImGui::GetIO();
-    (void)io;
-
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL2_Init();
-
-    while(!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
-
-        ImGui_ImplOpenGL2_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        ImGui::Begin("Example");
-        ImGui::Text("Test");
-        ImGui::End();
-
-        ImGui::Render();
-
-        int w, h;
-        glfwGetWindowSize(window, &w, &h);
-
-        glViewport(0, 0, w, h);
-        glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-
-        glfwSwapBuffers(window);
-    }
-
-#ifdef _WIN32
-    ix::uninitNetSystem();
-#endif
-
-    ImGui_ImplOpenGL2_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-
-    glfwDestroyWindow(window);
     glfwTerminate();
 
     return 0;
