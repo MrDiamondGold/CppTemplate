@@ -10,11 +10,14 @@ find_package(OpenGL REQUIRED)
 
 add_subdirectory(thirdparty/CLI11)
 add_subdirectory(thirdparty/glfw)
+add_subdirectory(thirdparty/glm)
 
 file(GLOB IMGUI_SOURCES thirdparty/imgui thirdparty/imgui/examples *.c *.cpp)
 file(GLOB SOURCES src *.c *.cpp)
 
 add_executable(${CPP_PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES})
+
+set_target_properties(${CPP_PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 
 if(MSVC)
     
@@ -27,6 +30,5 @@ target_compile_options(${CPP_PROJECT_NAME} PRIVATE -DUNICODE)
 target_include_directories(${CPP_PROJECT_NAME} PRIVATE include)
 target_include_directories(${CPP_PROJECT_NAME} PRIVATE ${OPENGL_INCLUDE_DIR})
 
-target_link_libraries(${CPP_PROJECT_NAME} PRIVATE CLI11)
-target_link_libraries(${CPP_PROJECT_NAME} PRIVATE glfw)
+target_link_libraries(${CPP_PROJECT_NAME} PRIVATE CLI11 glfw glm::glm)
 target_link_libraries(${CPP_PROJECT_NAME} PRIVATE ${OPENGL_LIBRARY})
