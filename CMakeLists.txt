@@ -13,14 +13,16 @@ add_subdirectory(thirdparty/glfw)
 add_subdirectory(thirdparty/glm)
 
 file(GLOB IMGUI_SOURCES thirdparty/imgui thirdparty/imgui/examples *.c *.cpp)
-file(GLOB SOURCES src *.c *.cpp)
+file(GLOB SOURCE_FILES src *.cpp *.h *.c *.hpp */*.h */*.cpp */*.c */*.hpp)
 
-add_executable(${CPP_PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES})
+add_executable(${CPP_PROJECT_NAME} ${SOURCE_FILES} ${IMGUI_SOURCES})
 
 set_target_properties(${CPP_PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 
 if(MSVC)
-    
+    set_target_properties(${CPP_PROJECT_NAME} PROPERTIES
+    LINK_FLAGS /MACHINE:X64
+    )
 else()
     set(CMAKE_CXX_FLAGS "-Wall -Werror -Wpedantic -Wextra")
 endif()
