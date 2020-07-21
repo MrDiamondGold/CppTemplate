@@ -1,5 +1,6 @@
-//#include <glad/glad.h>
-//#include <GLFW/glfw3.h>
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 #include <glad/glad.h>
 
@@ -8,6 +9,7 @@
 
 #include <CLI/CLI.hpp>
 #include <glm/glm.hpp>
+
 #include <iostream>
 #include <memory>
 #include <sstream>
@@ -68,12 +70,22 @@ void init(CmdArgs arguments) {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         throw std::runtime_error("Failed to load OpenGL context.");
     }
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    (void)io;
+
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 150");
 }
 
 int main(int argc, char** argv) {
     CLI::App app{title.c_str()};
 
-    CmdArgs arguments = {640, 480};
+    CmdArgs arguments = {1280, 720};
 
     app.add_option("--width", arguments.width, "");
     app.add_option("--height", arguments.height, "");
@@ -103,11 +115,20 @@ int main(int argc, char** argv) {
         glViewport(0, 0, arguments.width, arguments.height);
 
         while (!glfwWindowShouldClose(window)) {
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+            ImGui::ShowDemoWindow();
+            ImGui::Render();
+
             glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             shader.bind();
             mesh.draw();
+
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
             glfwSwapBuffers(window);
             glfwPollEvents();
@@ -116,6 +137,11 @@ int main(int argc, char** argv) {
         std::cerr << e.what() << "\n";
     }
 
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    glfwDestroyWindow(window);
     glfwTerminate();
 
     return 0;

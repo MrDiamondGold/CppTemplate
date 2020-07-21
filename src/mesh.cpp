@@ -7,9 +7,9 @@ Mesh::Mesh() {
 }
 
 Mesh::~Mesh() {
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
+    glDeleteVertexArrays(1, &this->VAO);
+    glDeleteBuffers(1, &this->VBO);
+    glDeleteBuffers(1, &this->EBO);
 }
 
 void Mesh::updateMesh() {
@@ -19,22 +19,22 @@ void Mesh::updateMesh() {
     glBindVertexArray(this->VAO);
 
     glm::vec3 *vertexFront = NULL;
-    if(vertices.size() > 0)
+    if(this->vertices.size() > 0)
     {
-        vertexFront = &vertices.front();
+        vertexFront = &this->vertices.front();
     }
 
     unsigned int *indexFront = NULL;
-    if(indices.size() > 0)
+    if(this->indices.size() > 0)
     {
-        indexFront = &indices.front();
+        indexFront = &this->indices.front();
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * this->vertices.size(), vertexFront, GL_DYNAMIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * this->indices.size(), indexFront, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * this->indices.size(), indexFront, GL_DYNAMIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -45,5 +45,5 @@ void Mesh::updateMesh() {
 
 void Mesh::draw() const {
     glBindVertexArray(this->VAO);
-    glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0);
 }

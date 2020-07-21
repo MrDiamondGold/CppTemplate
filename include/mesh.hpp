@@ -10,7 +10,10 @@ class Mesh {
 
    public:
      std::vector<glm::vec3> vertices = std::vector<glm::vec3>();
-     std::vector<unsigned int> indices = std::vector<unsigned int>();
+     std::vector<glm::vec3> normals = std::vector<glm::vec3>();
+     std::vector<glm::vec3> colors = std::vector<glm::vec3>();
+     std::vector<glm::vec2> uvs = std::vector<glm::vec2>();
+     std::vector<uint32_t> indices = std::vector<uint32_t>();
 
      Mesh();
      ~Mesh();
