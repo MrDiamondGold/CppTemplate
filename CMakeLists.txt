@@ -3,15 +3,16 @@ cmake_minimum_required(VERSION 3.14)
 set(CPP_PROJECT_NAME CppTemplate)
 
 project(${CPP_PROJECT_NAME} LANGUAGES C CXX)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(OpenGL REQUIRED)
+find_package(Ktx REQUIRED)
 
 add_subdirectory(thirdparty/CLI11)
 add_subdirectory(thirdparty/glfw)
 add_subdirectory(thirdparty/glm)
-add_subdirectory(thirdparty/gravity)
+# add_subdirectory(thirdparty/gravity)
 
 set(IMGUI_IMPLEMENTATION_SOURCES thirdparty/imgui/examples/imgui_impl_glfw.cpp thirdparty/imgui/examples/imgui_impl_opengl3.cpp)
 
@@ -32,4 +33,4 @@ target_compile_options(${CPP_PROJECT_NAME} PRIVATE -DUNICODE)
 
 target_include_directories(${CPP_PROJECT_NAME} PRIVATE include thirdparty/imgui thirdparty/imgui/examples ${OPENGL_INCLUDE_DIR})
 
-target_link_libraries(${CPP_PROJECT_NAME} PRIVATE CLI11 glfw glm::glm gravityapi ${OPENGL_LIBRARY})
+target_link_libraries(${CPP_PROJECT_NAME} PRIVATE CLI11 glfw glm::glm KTX::ktx ${OPENGL_LIBRARY})
