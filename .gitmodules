@@ -4,9 +4,6 @@
 [submodule "thirdparty/glfw"]
 	path = thirdparty/glfw
 	url = https://github.com/glfw/glfw.git
-[submodule "thirdparty/imgui"]
-	path = thirdparty/imgui
-	url = https://github.com/ocornut/imgui.git
 [submodule "thirdparty/glm"]
 	path = thirdparty/glm
 	url = https://github.com/g-truc/glm.git
@@ -22,3 +19,6 @@
 [submodule "thirdparty/bimg"]
 	path = thirdparty/bimg
 	url = https://github.com/bkaradzic/bimg.git
+[submodule "thirdparty/nativefiledialog-extended"]
+	path = thirdparty/nativefiledialog-extended
+	url = https://github.com/btzy/nativefiledialog-extended

@@ -61,6 +61,11 @@ Program::~Program() {
     glDeleteProgram(this->id);
 }
 
+void Program::set_matrix(const std::string name, glm::mat4 matrix) const {
+    unsigned int matrix_location = glGetUniformLocation(this->id, name.c_str());
+    glUniformMatrix4fv(matrix_location, 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
 void Program::bind() const {
     glUseProgram(this->id);
 }

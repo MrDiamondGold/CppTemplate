@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <stdexcept>
 #include <vector>
 
@@ -16,6 +18,8 @@ class Program {
    public:
     Program(const char* vertexCode, const char* fragmentCode);
     ~Program();
+
+    void set_matrix(const std::string name, glm::mat4 matrix) const;
 
     void bind() const;
 };
