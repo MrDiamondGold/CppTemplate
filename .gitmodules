@@ -13,7 +13,7 @@
 [submodule "thirdparty/nativefiledialog-extended"]
 	path = thirdparty/nativefiledialog-extended
 	url = https://github.com/btzy/nativefiledialog-extended
-[submodule "thirdparty/--force"]
-	path = thirdparty/--force
+[submodule "thirdparty/imgui"]
+	path = thirdparty/imgui
 	url = https://github.com/ocornut/imgui
 	branch = docking

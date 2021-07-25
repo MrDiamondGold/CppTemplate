@@ -1,4 +1,4 @@
-#include "program.hpp"
+#include "program.h"
 
 unsigned int Program::create_program(unsigned int vertexShader, unsigned int fragmentShader) {
     unsigned int id = glCreateProgram();
@@ -18,6 +18,7 @@ unsigned int Program::create_program(unsigned int vertexShader, unsigned int fra
 
         glDeleteProgram(id);
 
+        std::cout << log.data() << '\n';
         throw std::runtime_error(log.data());
     }
 
@@ -41,6 +42,7 @@ unsigned int Program::create_shader(const char* code, GLenum type) {
 
         glDeleteShader(id);
 
+        std::cout << log.data() << '\n';
         throw std::runtime_error(log.data());
     }
 
@@ -59,6 +61,26 @@ Program::Program(const char* vertexCode, const char* fragmentCode) {
 
 Program::~Program() {
     glDeleteProgram(this->id);
+}
+
+void Program::set_int(const std::string name, int value) const {
+    unsigned int int_location = glGetUniformLocation(this->id, name.c_str());
+    glUniform1i(int_location, value);
+}
+
+void Program::set_float(const std::string name, float value) const {
+    unsigned int float_location = glGetUniformLocation(this->id, name.c_str());
+    glUniform1f(float_location, value);
+}
+
+void Program::set_vec3(const std::string name, glm::vec3 value) const {
+    unsigned int vec3_location = glGetUniformLocation(this->id, name.c_str());
+    glUniform3fv(vec3_location, 1, glm::value_ptr(value));
+}
+
+void Program::set_vec4(const std::string name, glm::vec4 value) const {
+    unsigned int vec4_location = glGetUniformLocation(this->id, name.c_str());
+    glUniform4fv(vec4_location, 1, glm::value_ptr(value));
 }
 
 void Program::set_matrix(const std::string name, glm::mat4 matrix) const {

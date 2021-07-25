@@ -8,7 +8,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Threads REQUIRED)
 find_package(OpenGL REQUIRED)
-find_package(Ktx REQUIRED)
 
 add_subdirectory(thirdparty/CLI11)
 add_subdirectory(thirdparty/glfw)
@@ -22,17 +21,18 @@ set(IMGUI_SOURCES
    "thirdparty/imgui/imgui_demo.cpp"
    "thirdparty/imgui/imgui_draw.cpp"
    "thirdparty/imgui/imgui_widgets.cpp"
+   "thirdparty/imgui/imgui_tables.cpp"
    "thirdparty/imgui/imgui.cpp"
 )
 
 set(IMGUI_IMPL_SOURCES
-   "thirdparty/imgui/examples/imgui_impl_glfw.cpp"
-   "thirdparty/imgui/examples/imgui_impl_opengl3.cpp"
+   "thirdparty/imgui/backends/imgui_impl_glfw.cpp"
+   "thirdparty/imgui/backends/imgui_impl_opengl3.cpp"
 )
 
 set(IMGUI_INCLUDE_DIRS
    "thirdparty/imgui"
-   "thirdparty/imgui/examples"
+   "thirdparty/imgui/backends"
 )
 
 # CPP PROJECT
@@ -40,21 +40,25 @@ set(CPP_PROJECT_SOURCES
    "src/glad.c"
    "src/gltf.cpp"
    "src/main.cpp"
+   "src/state.cpp"
    "src/program.cpp"
-   "src/ktx_texture.cpp"
    "src/resources/shader.cpp"
    "src/resources/texture.cpp"
    "src/resources/resources.cpp"
+   "src/resources/gltf_scene.cpp"
 )
 
 set(CPP_PROJECT_INCLUDE_DIRS
    "include"
+   "include/actions"
    "include/resources"
 )
 
+file(MAKE_DIRECTORY build)
+
 add_executable(${CPP_PROJECT_NAME} ${CPP_PROJECT_SOURCES} ${IMGUI_SOURCES} ${IMGUI_IMPL_SOURCES})
-target_compile_options(${CPP_PROJECT_NAME} PRIVATE -DUNICODE)
 set_target_properties(${CPP_PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+target_compile_options(${CPP_PROJECT_NAME} PRIVATE)
 
 target_include_directories(${CPP_PROJECT_NAME} PRIVATE ${IMGUI_INCLUDE_DIRS} ${CPP_PROJECT_INCLUDE_DIRS})
-target_link_libraries(${CPP_PROJECT_NAME} PRIVATE CLI11 glfw glm::glm nfd OpenGL::GL KTX::ktx)
+target_link_libraries(${CPP_PROJECT_NAME} PRIVATE CLI11 glfw glm::glm nfd OpenGL::GL)
